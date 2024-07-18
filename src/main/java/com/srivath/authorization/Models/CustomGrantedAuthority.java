@@ -12,10 +12,15 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 @JsonDeserialize
 public class CustomGrantedAuthority implements GrantedAuthority {
-    private String role;
+    private String authority;
+
+    CustomGrantedAuthority()
+    {
+
+    }
 
     @Override
     public String getAuthority() {
-        return role;
+        return authority;
     }
 }

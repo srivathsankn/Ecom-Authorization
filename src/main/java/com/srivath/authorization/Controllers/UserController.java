@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @GetMapping("/details/{email}")
-    public ResponseEntity<UserDTO> getUserDetails(@RequestParam String email) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUserDetails(@PathVariable String email) throws UserNotFoundException {
         return ResponseEntity.ok(userService.getUserDetails(email));
     }
 

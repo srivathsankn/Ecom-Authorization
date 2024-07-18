@@ -2,8 +2,11 @@ package com.srivath.authorization.Models;
 
 import ch.qos.logback.core.joran.action.BaseModelAction;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -12,6 +15,8 @@ import lombok.Setter;
 public class Role extends BaseModel  {
     private String roleName;
     private String roleDescription;
+//    @ManyToMany(mappedBy = "roles")
+//    private List<User> users;
 
     public Role() {
 
