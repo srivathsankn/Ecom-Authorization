@@ -8,6 +8,7 @@ import com.srivath.authorization.Models.User;
 import com.srivath.authorization.DTOs.UserDTO;
 import com.srivath.authorization.Repositories.RoleRepository;
 import com.srivath.authorization.Repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,12 +16,14 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository userRepository ;
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository ;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    UserService(UserRepository userRepository, RoleRepository roleRepository){
+    UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDTO getUserDetails(String email)  throws  UserNotFoundException {
@@ -32,7 +35,8 @@ public class UserService {
     }
 
     public UserDTO signUp(UserFullDTO userFullDTO) throws RoleNotFoundException {
-        User user = new User(userFullDTO.getUserName(), userFullDTO.getEmail(), userFullDTO.getPassword());
+        String hashedPassword = this.passwordEncoder.encode(userFullDTO.getPassword());
+        User user = new User(userFullDTO.getUserName(), userFullDTO.getEmail(), hashedPassword);
 
         ArrayList<Role> roles = new ArrayList<>();
         user.setRoles(roles);

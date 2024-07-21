@@ -24,10 +24,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -88,7 +91,8 @@ public class SecurityConfig {
                 // authorization server filter chain
                 .formLogin(Customizer.withDefaults());
 
-        http.csrf().disable();
+        http.formLogin(Customizer.withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
@@ -157,6 +161,12 @@ public class SecurityConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder()
+    {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 
