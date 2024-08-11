@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +48,35 @@ public class UserService {
 //        }
         User savedUser = userRepository.save(user);
         return UserDTO.from(savedUser);
+    }
+
+    public UserDTO updateUserDetails(UserDTO userDTO) throws UserNotFoundException {
+        Optional<User> optionalUser = this.userRepository.findByEmail( userDTO.getEmail());
+        if (optionalUser.isEmpty())
+            throw new UserNotFoundException("User with email id " + userDTO.getEmail() + " not found!!! Please signup first!" );
+
+        User user = optionalUser.get();
+        if (userDTO.getUserName() != null)
+            user.setUserName(userDTO.getUserName());
+
+        if (!userDTO.getRoles().isEmpty())
+        {
+            user.setRoles(userDTO.getRoles());
+            List<Role> roles = user.getRoles();
+            for (int i = 0; i < roles.size(); i++) {
+                Role role = roles.get(i);
+                Optional<Role> role1 = this.roleRepository.findByRoleName(role.getRoleName());
+                if (role1.isPresent()) {
+                    roles.set(i,role1.get());
+                } else {
+                    roles.set(i,this.roleRepository.save(role));
+                }
+            }
+            user.setRoles(roles);
+        }
+
+        User updatedUser = this.userRepository.save(user);
+
+        return UserDTO.from(updatedUser);
     }
 }

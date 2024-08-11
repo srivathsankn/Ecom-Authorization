@@ -1,5 +1,6 @@
 package com.srivath.authorization.Controllers;
 
+import com.srivath.authorization.DTOs.UserEmailDTO;
 import com.srivath.authorization.Exceptions.RoleNotFoundException;
 import com.srivath.authorization.Exceptions.UserNotFoundException;
 import com.srivath.authorization.DTOs.UserDTO;
@@ -17,9 +18,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/details/{email}")
-    public ResponseEntity<UserDTO> getUserDetails(@PathVariable String email) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.getUserDetails(email));
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello";
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<UserDTO> getUserDetails(@RequestBody UserEmailDTO userEmailDTO) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getUserDetails(userEmailDTO.getEmail()));
+    }
+
+    @PutMapping("/details")
+    public ResponseEntity<UserDTO> updateUserDetails(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.updateUserDetails(userDTO));
     }
 
     @PostMapping("/signup")
