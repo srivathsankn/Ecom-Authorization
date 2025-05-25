@@ -35,7 +35,7 @@ public class UserService {
             throw new UserNotFoundException("User with email" + email + "not found");
     }
 
-    public UserDTO signUp(UserFullDTO userFullDTO) throws RoleNotFoundException {
+    public UserDTO signUp(UserFullDTO userFullDTO)  {
         String hashedPassword = this.passwordEncoder.encode(userFullDTO.getPassword());
         User user = new User(userFullDTO.getUserName(), userFullDTO.getEmail(), hashedPassword);
 
@@ -78,5 +78,25 @@ public class UserService {
         User updatedUser = this.userRepository.save(user);
 
         return UserDTO.from(updatedUser);
+    }
+
+    //generate a function to get all users
+    public List<UserDTO> getAllUsers() {
+        List<User> users = this.userRepository.findAll();
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user: users) {
+            userDTOS.add(UserDTO.from(user));
+        }
+        return userDTOS;
+    }
+
+    //generate a function to delete a user
+    public UserDTO deleteUser(String email) throws UserNotFoundException {
+        Optional<User> optionalUser = this.userRepository.findByEmail(email);
+        if (optionalUser.isEmpty())
+            throw new UserNotFoundException("User with email id " + email + " not found!!! Please signup first!" );
+        User user = optionalUser.get();
+        this.userRepository.delete(user);
+        return UserDTO.from(user);
     }
 }
