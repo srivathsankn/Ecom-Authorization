@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.srivath.authorization.Models.Client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 public class JpaRegisteredClientRepository implements RegisteredClientRepository {
+    @Autowired
     private final ClientRepository clientRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -115,6 +117,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
         entity.setScopes(StringUtils.collectionToCommaDelimitedString(registeredClient.getScopes()));
         entity.setClientSettings(writeMap(registeredClient.getClientSettings().getSettings()));
         entity.setTokenSettings(writeMap(registeredClient.getTokenSettings().getSettings()));
+
 
         return entity;
     }

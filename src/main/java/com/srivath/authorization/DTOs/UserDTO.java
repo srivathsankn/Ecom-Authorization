@@ -15,10 +15,11 @@ import java.util.List;
 public class UserDTO {
     private String userName;
     private String email;
+    private String phoneNumber;
     @OneToMany
     private List<Role> roles;
 
     public static UserDTO from(User user) {
-        return new UserDTO(user.getUserName(), user.getEmail(), user.getRoles());
+        return new UserDTO(user.getUserName(), user.getEmail(), user.getPhoneNumber(), user.getRoles());
     }
 }

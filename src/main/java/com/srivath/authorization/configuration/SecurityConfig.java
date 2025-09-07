@@ -87,8 +87,8 @@ public class SecurityConfig {
                                 //.requestMatchers(HttpMethod.PUT, "/user/details").permitAll()
                                 .requestMatchers("/user/signup/**", "/user/details/**", "/user/hello").permitAll()
 
-                        .anyRequest().authenticated()
-                        //.anyRequest().permitAll()
+                        //.anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
@@ -180,9 +180,11 @@ public class SecurityConfig {
         return (context) -> {
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
                 context.getClaims().claims((claims) -> {
+                    //Set<String> roles = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
                     Set<String> roles = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
                             .stream()
                             .map(c -> c.replaceFirst("^ROLE_", ""))
+//                            .map(c -> c.replaceFirst("^SCOPE_", ""))
                             .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
                     claims.put("roles", roles);
                 });

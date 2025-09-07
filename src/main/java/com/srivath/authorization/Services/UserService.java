@@ -37,7 +37,7 @@ public class UserService {
 
     public UserDTO signUp(UserFullDTO userFullDTO)  {
         String hashedPassword = this.passwordEncoder.encode(userFullDTO.getPassword());
-        User user = new User(userFullDTO.getUserName(), userFullDTO.getEmail(), hashedPassword);
+        User user = new User(userFullDTO.getUserName(), userFullDTO.getEmail(), userFullDTO.getPhoneNumber(), hashedPassword);
 
         ArrayList<Role> roles = new ArrayList<>();
         user.setRoles(roles);
